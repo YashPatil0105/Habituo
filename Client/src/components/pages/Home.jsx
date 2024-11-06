@@ -1,8 +1,3 @@
-// import React from "react";
-
-// export const Home = () => {
-//   return <h1>Home</h1>;
-// };
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Check, Target, Brain, Calendar, Trophy, Github, Twitter, Linkedin } from 'lucide-react';
 
