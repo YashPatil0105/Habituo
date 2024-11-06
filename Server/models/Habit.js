@@ -1,45 +1,14 @@
 // models/Habit.js
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
-
-const HabitSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    trim: true,
-  },
-  frequency: {
-    type: String,
-    enum: ['daily', 'weekly', 'monthly'],
-    required: true,
-  },
-  targetDays: {
-    type: Number,
-    required: true,
-  },
-  progress: {
-    type: Number,
-    default: 0,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-  startDate: {
-    type: Date,
-    default: Date.now,
-  },
-  endDate: Date,
-}, { timestamps: true });
+const HabitSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  title: { type: String, required: true },
+  frequency: { type: String, required: true }, // E.g., daily, weekly
+  points: { type: Number, default: 10 }, // Points awarded for completion
+  currentStreak: { type: Number, default: 0 }, // Track streak count
+  lastCompleted: { type: Date }, // Last time the habit was completed
+  createdAt: { type: Date, default: Date.now }
+});
 
 export default mongoose.model('Habit', HabitSchema);

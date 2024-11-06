@@ -1,38 +1,14 @@
 // models/Challenge.js
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
-
-const ChallengeSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    trim: true,
-  },
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    required: true,
-  },
-  participants: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  }],
-  habits: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Habit',
-  }],
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-}, { timestamps: true });
+const ChallengeSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  title: { type: String, required: true },
+  description: { type: String },
+  points: { type: Number, default: 50 }, // Points for completion
+  completed: { type: Boolean, default: false }, // Completion status
+  deadline: { type: Date }, // Optional deadline for the challenge
+  createdAt: { type: Date, default: Date.now }
+});
 
 export default mongoose.model('Challenge', ChallengeSchema);
