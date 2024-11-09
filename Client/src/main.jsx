@@ -22,11 +22,11 @@ import App from "./App";
 import { store } from "./app/store";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <React.StrictMode>
+  <React.StrictMode>
+      <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
+      </Provider>
     </React.StrictMode>
-  </Provider>
 );

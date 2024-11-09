@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Check, Target, Brain, Calendar, Trophy, Github, Twitter, Linkedin } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser , selectCurrentToken } from '../../features/authSlice';
+import { Link } from 'react-router-dom';
+
 
 export const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+
 
   useEffect(() => {
     setIsVisible(true);
@@ -68,9 +75,10 @@ export const Home = () => {
               Track, plan, and achieve your goals with our intelligent productivity system
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors">
+              <Link to="/dashboardPage" className="no-underline text-white"><button className="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors">
                 Get Started <ChevronRight className="w-5 h-5" />
               </button>
+              </Link>
               <button className="px-8 py-4 bg-gray-800 hover:bg-gray-700 rounded-lg font-semibold transition-colors">
                 Learn More
               </button>
