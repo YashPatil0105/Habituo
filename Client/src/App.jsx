@@ -7,6 +7,7 @@ import RequireAuth from "./components/RequireAuth";
 import Login from "./components/Login";
 import Layout from "./components/Layout";
 import Register from "./components/Register";
+import BadgeMerchandise from "./components/pages/BadgeMerchandise";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
           {/* Protected routes */}
           <Route element={<RequireAuth />}>
+            <Route path="merchandise" element={<BadgeMerchandise />} />
             <Route path="planCreatorPage" element={<PlanCreatorPage />} />
             <Route path="dashboardPage" element={<DashboardPage />} />
             <Route path="challengePage" element={<ChallengePage />} />

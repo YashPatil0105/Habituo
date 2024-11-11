@@ -152,6 +152,8 @@ import React, { useState } from 'react';
 import Avatar from 'react-avatar';
 import { Modal } from 'react-bootstrap';
 import { CheckCircle, XCircle, Bell, Lock } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../features/authSlice';
 
 const achievementsData = [
   { id: 1, name: '21-Day Fitness Master', earned: true },
@@ -166,8 +168,9 @@ const challengesData = [
 ];
 
 export const UserProfilePage = () => {
+  const username = useSelector(selectCurrentUser)
   const [user, setUser] = useState({
-    username: 'JaneDoe',
+    username: username.toUpperCase(),
     bio: 'Fitness enthusiast and nature lover.',
     profilePicture: '', // URL for the profile picture
     totalChallengesCompleted: 5,
@@ -286,7 +289,8 @@ export const UserProfilePage = () => {
       </section>
 
       {/* Edit Profile Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+      
+      {/* <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
@@ -317,7 +321,51 @@ export const UserProfilePage = () => {
             Save Changes
           </button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
+<Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+  <Modal.Header closeButton className="bg-gray-800 text-white">
+    <Modal.Title>Edit Profile</Modal.Title>
+  </Modal.Header>
+  <Modal.Body className="bg-gray-900 text-white">
+    <div className="mb-3">
+      <label className="block text-sm">Username</label>
+      <input
+        type="text"
+        value={newUsername}
+        onChange={(e) => setNewUsername(e.target.value)}
+        className="w-full p-3 rounded bg-gray-700 text-white"
+      />
+    </div>
+    <div className="mb-3">
+      <label className="block text-sm">Bio</label>
+      <textarea
+        value={newBio}
+        onChange={(e) => setNewBio(e.target.value)}
+        className="w-full p-3 rounded bg-gray-700 text-white"
+      />
+    </div>
+  </Modal.Body>
+  <Modal.Footer
+    style={{ backgroundColor: '#1f2937', color: 'white' }}
+  >
+    <button
+      variant="secondary"
+      onClick={() => setShowEditModal(false)}
+      className="px-6 py-2 bg-gray-600 rounded text-gray-300 hover:bg-gray-500 transition-colors"
+    >
+      Cancel
+    </button>
+    <button
+      variant="primary"
+      onClick={handleEditProfile}
+      className="px-6 py-2 bg-gray-600 rounded text-white hover:bg-gray-700 transition-colors"
+    >
+      Save Changes
+    </button>
+  </Modal.Footer>
+</Modal>
+
+
     </div>
   );
 };
