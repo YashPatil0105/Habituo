@@ -198,6 +198,7 @@ import { setCredentials } from '../features/authSlice';
 import { useLoginMutation } from '../features/authApiSlice';
 import { User, Lock, Loader2, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThreeBackground } from './pages/ThreeBackground';
 
 const Login = () => {
     const userRef = useRef();
@@ -251,6 +252,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+            <ThreeBackground></ThreeBackground>
             <div className="relative">
                 {/* Background decorators */}
                 <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />

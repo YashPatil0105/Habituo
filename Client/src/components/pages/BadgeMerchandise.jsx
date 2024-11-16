@@ -35,7 +35,7 @@ const BadgeMerchandise = () => {
   const [showCart, setShowCart] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
@@ -158,6 +158,7 @@ const BadgeMerchandise = () => {
       setEmailError('Please enter a valid email address');
       return;
     }
+    
   
     setEmailError('');
     setIsProcessing(true);
@@ -334,6 +335,7 @@ const BadgeMerchandise = () => {
             className={`mb-2 ${emailError ? 'border-red-500' : 'border-gray-600'}`}
             disabled={isProcessing}
           />
+          
           {emailError && (
             <p className="text-red-500 text-sm mb-2">{emailError}</p>
           )}

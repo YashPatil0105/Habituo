@@ -63,6 +63,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Lock, Loader2 } from 'lucide-react';
+import { ThreeBackground } from './pages/ThreeBackground';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -99,6 +100,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+            <ThreeBackground></ThreeBackground>
             <div className="relative">
                 {/* Background decorator */}
                 <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
