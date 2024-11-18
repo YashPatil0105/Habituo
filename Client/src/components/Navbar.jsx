@@ -1,98 +1,66 @@
-
-// import React, { useState } from "react";
-// import "./Navbar.css";
-// import { Link, NavLink } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
-// import { logOut, selectCurrentUser } from "../features/authSlice.js"; // Import logOut and selectCurrentUser selector
-
-// export const Navbar = () => {
-//   const [menuOpen, setMenuOpen] = useState(false);
-//   const dispatch = useDispatch();
-
-//   // Access user from Redux store
-//   const user = useSelector(selectCurrentUser);
-//   const isAuthenticated = Boolean(user); // True if user is logged in
-
-//   const handleLogout = () => {
-//     dispatch(logOut()); // Reset auth state by logging out
-//   };
-
-//   return (
-//     <nav>
-//       <Link to="/" className="title">
-//         Habituo
-//       </Link>
-//       <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
-//         <span></span>
-//         <span></span>
-//         <span></span>
-//       </div>
-//       <ul className={menuOpen ? "open" : ""}>
-//         <li>
-//           <NavLink to="/planCreatorPage" title="Create your plan here">Strategize</NavLink>
-//         </li>
-//         <li>
-//           <NavLink to="/dashboardPage" title="Track your progress and stats">InsightBoard</NavLink>
-//         </li>
-//         <li>
-//           <NavLink to="/challengePage" title="Track your 21/45/90 day challenges">PeakTrack</NavLink>
-//         </li>
-//         <li>
-//           <NavLink to="/userProfile" title="View and edit your profile">MyPath</NavLink>
-//         </li>
-
-//         {isAuthenticated ? (
-//           <>
-//             <li className="welcome">
-//               <span>Welcome, {user || "User"}</span>
-//             </li>
-//             <li>
-//               <button onClick={handleLogout} className="logout-btn">
-//                 Logout
-//               </button>
-//             </li>
-//           </>
-//         ) : (
-//           <>
-//             <li>
-//               <NavLink to="/login" className="auth-btn" title="Sign In to your account">Sign In</NavLink>
-//             </li>
-//           </>
-//         )}
-//       </ul>
-//     </nav>
-//   );
-// };
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut, selectCurrentUser } from "../features/authSlice";
-import { 
-  Menu, 
-  X, 
-  LayoutDashboard, 
-  Target, 
-  Trophy, 
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Target,
+  Trophy,
   User,
   LogOut,
-  LogIn
+  LogIn,
+  ShoppingBag,
+  Bell,
+  ChevronDown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(3);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
   const user = useSelector(selectCurrentUser);
   const isAuthenticated = Boolean(user);
 
-  // Close mobile menu when route changes
+  const notificationsRef = useRef(null);
+  const userDropdownRef = useRef(null);
+
   useEffect(() => {
     setMenuOpen(false);
+    setNotificationsOpen(false);
+    setUserDropdownOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Handle notifications click outside
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
+        setNotificationsOpen(false);
+      }
+      // Handle user dropdown click outside
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target)
+      ) {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
     dispatch(logOut());
+    setUserDropdownOpen(false);
   };
 
   const navItems = [
@@ -100,44 +68,69 @@ export const Navbar = () => {
       path: "/planCreatorPage",
       title: "Strategize",
       icon: <Target className="w-4 h-4" />,
-      tooltip: "Create your plan here"
+      tooltip: "Create your plan here",
+      highlights: "New templates available!",
     },
     {
       path: "/dashboardPage",
       title: "InsightBoard",
       icon: <LayoutDashboard className="w-4 h-4" />,
-      tooltip: "Track your progress and stats"
+      tooltip: "Track your progress and stats",
+      highlights: "3 milestones reached",
     },
     {
       path: "/challengePage",
       title: "PeakTrack",
       icon: <Trophy className="w-4 h-4" />,
-      tooltip: "Track your 21/45/90 day challenges"
+      tooltip: "Track your 21/45/90 day challenges",
+      highlights: "Day 15 of 21",
     },
     {
-      path: "/userProfile",
-      title: "MyPath",
-      icon: <User className="w-4 h-4" />,
-      tooltip: "View and edit your profile"
-    }
+      path: "/merchandise",
+      title: "HabitStore",
+      icon: <ShoppingBag className="w-4 h-4" />,
+      tooltip: "Browse our merchandise collection",
+      highlights: "New arrivals!",
+      badge: cartCount,
+    },
+  ];
+
+  const notifications = [
+    {
+      id: 1,
+      title: "New Achievement!",
+      message: "You've completed your first 21-day challenge",
+      time: "2m ago",
+      type: "achievement",
+    },
+    {
+      id: 2,
+      title: "Limited Time Offer",
+      message: "20% off on premium merchandise",
+      time: "1h ago",
+      type: "promotion",
+    },
   ];
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-500 sticky top-0 z-50 px-4">
-      <div className="max-w-7xl mx-auto">
+    <nav className="backdrop-blur-md bg-gradient-to-r from-gray-900/95 to-gray-800/95 border-b border-gray-500/30 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
-            className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text hover:opacity-80 transition-opacity"
+          <Link
+            to="/"
+            className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-transparent bg-clip-text hover:opacity-80 transition-opacity flex items-center gap-2"
           >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg">
+              H
+            </div>
             Habituo
           </Link>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
+            className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
           >
             {menuOpen ? (
               <X className="w-6 h-6 text-gray-200" />
@@ -154,37 +147,128 @@ export const Navbar = () => {
                 to={item.path}
                 title={item.tooltip}
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group
-                  ${isActive 
-                    ? 'text-white bg-gray-800 shadow-lg shadow-blue-500/20' 
-                    : 'text-gray-300 hover:text-white hover:bg-gray-800'}`
+                  `relative flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                  ${
+                    isActive
+                      ? "text-white bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 shadow-lg shadow-purple-500/10"
+                      : "text-gray-300 hover:text-white hover:bg-white/5"
+                  }`
                 }
               >
                 <span className="mr-2">{item.icon}</span>
-                {item.title}
-                <div className="absolute hidden group-hover:block bg-gray-900 text-xs text-gray-300 p-2 rounded shadow-lg -bottom-8">
-                  {item.tooltip}
-                </div>
+                <span>{item.title}</span>
+                {item.badge && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-lg shadow-pink-500/20">
+                    {item.badge}
+                  </span>
+                )}
               </NavLink>
             ))}
 
             {isAuthenticated ? (
-              <div className="flex items-center ml-4 space-x-4">
-                <span className="text-sm text-gray-300">
-                  Welcome, <span className="font-medium text-white">{user.toUpperCase() || "User"}</span>
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition-colors"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </button>
+              <div className="flex items-center ml-6 space-x-4">
+                {/* Notifications */}
+                <div className="relative" ref={notificationsRef}>
+                  <button
+                    onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    className="relative p-2 rounded-lg hover:bg-white/5 transition-colors"
+                  >
+                    <Bell className="w-5 h-5 text-gray-300 hover:text-white transition-colors" />
+                    <span className="absolute -top-1 -right-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-lg shadow-blue-500/20">
+                      {notifications.length}
+                    </span>
+                  </button>
+
+                  {/* Notifications Dropdown */}
+                  <AnimatePresence>
+                    {notificationsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-0 mt-2 w-80 rounded-lg bg-gray-800/95 backdrop-blur-md shadow-xl border border-gray-700/50"
+                      >
+                        <div className="p-3 border-b border-gray-700/50">
+                          <h3 className="text-white font-medium">
+                            Notifications
+                          </h3>
+                        </div>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className="p-3 hover:bg-white/5 transition-colors border-b border-gray-700/50 last:border-none"
+                            >
+                              <div className="flex justify-between items-start">
+                                <h4 className="text-white text-sm font-medium">
+                                  {notification.title}
+                                </h4>
+                                <span className="text-xs text-gray-400">
+                                  {notification.time}
+                                </span>
+                              </div>
+                              <p className="text-gray-300 text-sm mt-1">
+                                {notification.message}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div className="h-6 w-px bg-gray-600/50" />
+
+                {/* User Dropdown */}
+                <div className="relative" ref={userDropdownRef}>
+                  <button
+                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                    className="flex items-center space-x-2 p-1 rounded-lg hover:bg-white/5 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium">
+                      {user?.[0]?.toUpperCase() || "U"}
+                    </div>
+                    <span className="text-sm text-gray-300 hover:text-white transition-colors">
+                      {user?.toUpperCase() || "User"}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+                  </button>
+
+                  {/* User Menu Dropdown */}
+                  <AnimatePresence>
+                    {userDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-800/95 backdrop-blur-md shadow-xl border border-gray-700/50"
+                      >
+                        <div className="p-2">
+                          <Link
+                            to="/userProfile"
+                            className="w-full flex items-center px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-white/5 transition-colors"
+                          >
+                            <User className="w-4 h-4 mr-2" />
+                            Profile
+                          </Link>
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-white/5 transition-colors"
+                          >
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Logout
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             ) : (
               <Link
                 to="/login"
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 transition-opacity ml-4"
+                className="flex items-center  px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white transition-all hover:shadow-lg hover:shadow-blue-500/20 ml-4"
               >
                 <LogIn className="w-4 h-4 mr-2" />
                 Sign In
@@ -198,36 +282,59 @@ export const Navbar = () => {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
             className="lg:hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-800/95 backdrop-blur-lg">
               {navItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                    ${isActive 
-                      ? 'text-white bg-gray-800 shadow-lg shadow-blue-500/20' 
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'}`
+                    `flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                    ${
+                      isActive
+                        ? "text-white bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 shadow-lg shadow-purple-500/10"
+                        : "text-gray-300 hover:text-white hover:bg-white/5"
+                    }`
                   }
                 >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.title}
+                  <div className="flex items-center">
+                    <span className="mr-2">{item.icon}</span>
+                    <span>{item.title}</span>
+                  </div>
+                  {item.badge && (
+                    <span className="bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                      {item.badge}
+                    </span>
+                  )}
                 </NavLink>
               ))}
 
               {isAuthenticated ? (
-                <div className="space-y-2 pt-2 border-t border-gray-800">
-                  <div className="px-3 py-2 text-sm text-gray-300">
-                    Welcome, <span className="font-medium text-white">{user || "User"}</span>
+                <div className="space-y-2 pt-2 border-t border-gray-700/50">
+                  <div className="px-3 py-2 flex items-center space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium">
+                      {user?.[0]?.toUpperCase() || "U"}
+                    </div>
+                    <span className="text-sm text-gray-300">
+                      {user?.toUpperCase() || "User"}
+                    </span>
                   </div>
+                  {/* Add this before the logout button in mobile menu */}
+                  <Link
+                    to="/userProfile"
+                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-white/5 transition-colors"
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Profile
+                  </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition-colors"
+                    className="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-red-500 to-rose-600 text-white transition-all hover:shadow-lg hover:shadow-red-500/20"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout
@@ -236,11 +343,42 @@ export const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 transition-opacity mt-2"
+                  className="flex items-center justify-center px-3 py-2 mt-2 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white transition-all hover:shadow-lg hover:shadow-blue-500/20"
                 >
-                  <LogIn className="w-4 h-4 mr-2" />
+                  <LogIn className="w-4 h-4  mr-2" />
                   Sign In
                 </Link>
+              )}
+
+              {/* Mobile Notifications */}
+              {isAuthenticated && (
+                <div className="mt-4 border-t border-gray-700/50 pt-4">
+                  <div className="px-3">
+                    <h3 className="text-white font-medium text-sm mb-2">
+                      Notifications
+                    </h3>
+                    <div className="space-y-2">
+                      {notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                        >
+                          <div className="flex justify-between items-start">
+                            <h4 className="text-white text-sm font-medium">
+                              {notification.title}
+                            </h4>
+                            <span className="text-xs text-gray-400">
+                              {notification.time}
+                            </span>
+                          </div>
+                          <p className="text-gray-300 text-sm mt-1">
+                            {notification.message}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </motion.div>
@@ -249,3 +387,5 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+export default Navbar;

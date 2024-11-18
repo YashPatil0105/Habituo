@@ -98,8 +98,8 @@ export const Home = () => {
     },
     {
       icon: <ClipboardCheck className="w-8 h-8 text-blue-400" />,
-      title: "Leverage Expert Insights",
-      description: "Access curated resources, expert tips, and strategies tailored to help you succeed."
+    title: "Use Guided Templates",
+    description: "Access structured templates to break down your goals into achievable steps"
     },
     {
       icon: <BarChart className="w-8 h-8 text-green-400" />,

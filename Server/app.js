@@ -130,7 +130,9 @@ import { credentials } from './middleware/credentials.js';
 import { verifyJWT } from './middleware/authenticate.js';
 // Import routes
 import authRoutes from './routes/authRoutes.js';
-
+import planRoutes from './routes/planRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import rewardRoutes from './routes/rewardRoutes.js';
 const app = express();
 
 // Directory setup for ES Modules
@@ -150,9 +152,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Apply routes without verifyJWT for public access
 app.use('/', authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use('/plans', planRoutes);
+app.use("/api/rewards", rewardRoutes);
 
 // Apply verifyJWT middleware **after** public routes for protected routes
 app.use(verifyJWT);
+
 
 // Error handling middleware
 app.use(errorHandler);

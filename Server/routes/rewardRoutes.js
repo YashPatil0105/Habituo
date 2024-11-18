@@ -1,10 +1,9 @@
-import express from 'express';
-import { addPoints } from '../controllers/rewardController.js';
-import authenticate from '../middleware/authenticate.js';
+import express from "express";
+import { updateRewards, getUserRewards } from "../controllers/rewardController.js";
 
 const router = express.Router();
 
-// Add reward points to the user
-router.post('/points', authenticate, addPoints);
+router.post("/update", updateRewards); // Update rewards
+router.get("/:userId", getUserRewards); // Get reward history for a user
 
 export default router;

@@ -23,14 +23,12 @@ const handleLogin = async (req, res) => {
         // console.log(match);
         if (!match) return res.sendStatus(401); // Unauthorized
 
-        // const roles = Array.isArray(foundUser.roles)
-        //     ? foundUser.roles
-        //     : Object.values(foundUser.roles).filter(Boolean);
-
+    
         // Create JWT tokens
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
+                    "id" : foundUser._id,
                     "username": foundUser.username,
                     // "roles": roles
                 }
@@ -40,7 +38,7 @@ const handleLogin = async (req, res) => {
         );
 
         const newRefreshToken = jwt.sign(
-            { "username": foundUser.username },
+            {  "username": foundUser.username },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' } // Extended refresh token expiration
         );

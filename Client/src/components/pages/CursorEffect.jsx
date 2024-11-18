@@ -95,27 +95,27 @@ export const CursorEffect = () => {
     <>
       <style>
         {`
-          .cursor {
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-          }
+          // .cursor {
+          //   width: 20px;
+          //   height: 20px;
+          //   background: rgba(255, 255, 255, 0.2);
+          //   border-radius: 50%;
+          //   position: fixed;
+          //   pointer-events: none;
+          //   z-index: 9999;
+          //   transition: transform 0.1s ease;
+          // }
           
-          .cursor-border {
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.15s ease;
-          }
+          // .cursor-border {
+          //   width: 40px;
+          //   height: 40px;
+          //   border: 2px solid rgba(255, 255, 255, 0.3);
+          //   border-radius: 50%;
+          //   position: fixed;
+          //   pointer-events: none;
+          //   z-index: 9998;
+          //   transition: transform 0.15s ease;
+          // }
           
           .cursor-light {
             position: fixed;
