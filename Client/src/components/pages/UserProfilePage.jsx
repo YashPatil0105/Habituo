@@ -1,144 +1,291 @@
-// import React, { useState } from 'react';
-// import Avatar  from 'react-avatar'; // Using react-avatar for profile pictures
-// import { Modal } from 'react-bootstrap'; // Modal component from react-bootstrap
-// import { CheckCircle, XCircle } from 'lucide-react'; // Icons for achievements
-
-// const achievementsData = [
-//   { id: 1, name: '21-Day Fitness Master', earned: true },
-//   { id: 2, name: '10,000 Steps a Day', earned: false },
-//   { id: 3, name: 'Daily Meditator', earned: true },
-// ];
-
-// const challengesData = [
-//   { id: 1, name: '30-Day Yoga Challenge', status: 'Ongoing' },
-//   { id: 2, name: 'Weekly Reading Challenge', status: 'Completed' },
-// ];
+// import React, { useState, useEffect } from 'react';
+// import { CheckCircle, Trophy, Flame, Calendar, Settings, Edit, Zap, ArrowRight, Menu, X } from 'lucide-react';
+// import Avatar from 'react-avatar';
+// import { Modal } from 'react-bootstrap';
 
 // export const UserProfilePage = () => {
 //   const [user, setUser] = useState({
-//     username: 'JaneDoe',
-//     bio: 'Fitness enthusiast and nature lover.',
-//     profilePicture: '', // URL for the profile picture
+//     username: '',
+//     points: 0,
+//     badges: [],
+//     streaks: [],
+//     bio: 'Neural architect | Digital innovator'
 //   });
-  
-//   const [showEditModal, setShowEditModal] = useState(false);
-//   const [newUsername, setNewUsername] = useState(user.username);
-//   const [newBio, setNewBio] = useState(user.bio);
-//   const [darkMode, setDarkMode] = useState(true); // Default to dark mode
-//   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
-//   const handleEditProfile = () => {
-//     setUser({ ...user, username: newUsername, bio: newBio });
-//     setShowEditModal(false);
+//   const [editProfile, setEditProfile] = useState({
+//     username: '',
+//     bio: ''
+//   });
+
+//   const [activeSection, setActiveSection] = useState('overview');
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       const userData = {
+//         username: 'CyberNinja',
+//         points: 750,
+//         bio: 'Neural architect | Digital innovator',
+//         badges: [
+//           { badgeName: 'Quantum Achiever', dateEarned: new Date(), description: 'Mastered advanced neural networks' },
+//           { badgeName: 'Tech Mastery', dateEarned: new Date(), description: 'Pioneered cutting-edge digital solutions' }
+//         ],
+//         streaks: [
+//           { habitId: 'Code Training', streakCount: 25, lastUpdated: new Date(), icon: <Zap className="text-blue-500" /> },
+//           { habitId: 'Mind Optimization', streakCount: 30, lastUpdated: new Date(), icon: <Flame className="text-purple-500" /> }
+//         ]
+//       };
+//       setUser(userData);
+//       setEditProfile({ 
+//         username: userData.username, 
+//         bio: userData.bio 
+//       });
+//     };
+
+//     fetchUserData();
+//   }, []);
+
+//   const handleProfileUpdate = () => {
+//     setUser(prev => ({
+//       ...prev,
+//       username: editProfile.username,
+//       bio: editProfile.bio
+//     }));
+//     setModalVisible(false);
+//   };
+
+//   const renderContent = () => {
+//     switch(activeSection) {
+//       case 'overview':
+//         return (
+//           <div className="space-y-4">
+//             <div className="flex items-center bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+//               <Avatar 
+//                 name={user.username} 
+//                 size="50" 
+//                 round={true} 
+//                 className="mr-4 ring-2 ring-cyan-500" 
+//               />
+//               <div>
+//                 <h2 className="text-xl font-bold text-cyan-300">{user.username}</h2>
+//                 <p className="text-cyan-600 text-xs">{user.bio}</p>
+//               </div>
+//             </div>
+//             <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center">
+//               <Flame className="mr-3 text-yellow-500 animate-pulse" />
+//               <span className="text-cyan-300">{user.points} Neural Points</span>
+//             </div>
+//             <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+//               <h3 className="text-xl text-cyan-500 mb-3">Quick Stats</h3>
+//               <div className="grid grid-cols-2 gap-4">
+//                 <div className="bg-[#112240] p-3 rounded-lg text-center">
+//                   <span className="block text-cyan-300 text-2xl font-bold">{user.badges.length}</span>
+//                   <span className="text-cyan-600 text-sm">Achievements</span>
+//                 </div>
+//                 <div className="bg-[#112240] p-3 rounded-lg text-center">
+//                   <span className="block text-cyan-300 text-2xl font-bold">{user.streaks.length}</span>
+//                   <span className="text-cyan-600 text-sm">Active Streams</span>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         );
+//       case 'badges':
+//         return (
+//           <div className="space-y-4">
+//             {user.badges.map((badge, index) => (
+//               <div 
+//                 key={index} 
+//                 className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center"
+//               >
+//                 <CheckCircle className="text-cyan-500 mr-4" />
+//                 <div>
+//                   <h4 className="text-cyan-300 font-semibold">{badge.badgeName}</h4>
+//                   <p className="text-cyan-600 text-sm">{badge.description}</p>
+//                   <p className="text-xs text-cyan-700 mt-1">
+//                     Synchronized: {badge.dateEarned.toLocaleDateString()}
+//                   </p>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         );
+//       case 'streaks':
+//         return (
+//           <div className="space-y-4">
+//             {user.streaks.map((streak, index) => (
+//               <div 
+//                 key={index} 
+//                 className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center justify-between"
+//               >
+//                 <div className="flex items-center">
+//                   {streak.icon}
+//                   <span className="ml-3 text-cyan-300">{streak.habitId} Stream</span>
+//                 </div>
+//                 <span className="text-cyan-500 font-bold">{streak.streakCount} Cycles</span>
+//               </div>
+//             ))}
+//           </div>
+//         );
+//       case 'settings':
+//         return (
+//           <div className="space-y-4">
+//             <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+//               <h3 className="text-cyan-500 mb-3">System Configuration</h3>
+//               <p className="text-cyan-600">Neural Network Synchronized</p>
+//             </div>
+//           </div>
+//         );
+//       default:
+//         return null;
+//     }
 //   };
 
 //   return (
-//     <div className={`min-h-screen p-5 ${darkMode ? 'bg-gray-900' : 'bg-white'} text-white`}>
-//       <header className="flex justify-between items-center mb-5">
-//         <h1 className="text-2xl font-bold">User Profile</h1>
-//       </header>
+//     <div className="min-h-screen bg-gradient-to-br from-[#0A1128] via-[#1A2B4A] to-[#2C3E5A] text-cyan-300 font-mono tracking-tight py-16 px-4">
+//       <div className="container mx-auto max-w-6xl">
+//         {/* Mobile Header */}
+//         <div className="md:hidden bg-[#112240] border border-cyan-800 rounded-xl mb-4">
+//           <div className="flex justify-between items-center p-4">
+//             <div className="flex items-center space-x-4">
+//               <Avatar 
+//                 name={user.username} 
+//                 size="50" 
+//                 round={true} 
+//                 className="ring-2 ring-cyan-500" 
+//               />
+//               <div>
+//                 <h2 className="text-xl font-bold text-cyan-300">{user.username}</h2>
+//                 <p className="text-cyan-600 text-xs">{user.bio}</p>
+//               </div>
+//             </div>
+//             <div className="flex items-center space-x-2">
+//               <button 
+//                 onClick={() => setModalVisible(true)}
+//                 className="bg-cyan-900/50 text-cyan-300 p-2 rounded-full hover:bg-cyan-800/50 transition border border-cyan-700"
+//               >
+//                 <Edit className="w-4 h-4" />
+//               </button>
+//               <button 
+//                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+//                 className="bg-cyan-900/50 text-cyan-300 p-2 rounded-full hover:bg-cyan-800/50 transition border border-cyan-700"
+//               >
+//                 {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+//               </button>
+//             </div>
+//           </div>
 
-//       <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-//         <h2 className="text-xl font-semibold mb-4">User Information</h2>
-//         <div className="flex items-center mb-4">
-//           <Avatar name={user.username} size="60" round={true} />
-//           <div className="ml-4">
-//             <h3 className="text-lg">{user.username}</h3>
-//             <p className="text-gray-400">{user.bio}</p>
+//           {/* Mobile Menu */}
+//           {mobileMenuOpen && (
+//             <div className="bg-[#0A1128] border-t border-cyan-800">
+//               {['overview', 'badges', 'streaks', 'settings'].map((section) => (
+//                 <button
+//                   key={section}
+//                   onClick={() => {
+//                     setActiveSection(section);
+//                     setMobileMenuOpen(false);
+//                   }}
+//                   className={`w-full text-left p-4 border-b border-cyan-800 transition-colors ${
+//                     activeSection === section 
+//                       ? 'bg-cyan-800/30 text-cyan-200' 
+//                       : 'text-cyan-500 hover:bg-cyan-800/20'
+//                   }`}
+//                 >
+//                   <span className="capitalize">{section}</span>
+//                 </button>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Desktop Layout */}
+//         <div className="hidden md:grid md:grid-cols-[250px_1fr] gap-6">
+//           {/* Sidebar Navigation */}
+//           <div className="bg-[#112240] border border-cyan-800 rounded-xl p-4 space-y-2">
+//             {['overview', 'badges', 'streaks', 'settings'].map((section) => (
+//               <button
+//                 key={section}
+//                 onClick={() => setActiveSection(section)}
+//                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-all ${
+//                   activeSection === section 
+//                     ? 'bg-cyan-800/30 text-cyan-200 border border-cyan-700' 
+//                     : 'text-cyan-500 hover:bg-cyan-800/20'
+//                 }`}
+//               >
+//                 <span className="capitalize">{section}</span>
+//                 <ArrowRight className="w-5 h-5" />
+//               </button>
+//             ))}
+//           </div>
+
+//           {/* Main Content */}
+//           <div className="bg-[#112240] border border-cyan-800 rounded-xl overflow-hidden">
+//             <div className="p-6">
+//               {renderContent()}
+//             </div>
 //           </div>
 //         </div>
-//         <button
-//           onClick={() => setShowEditModal(true)}
-//           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-//         >
-//           Edit Profile
-//         </button>
-//       </section>
 
-//       <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-//         <h2 className="text-xl font-semibold mb-4">Achievements / Badges</h2>
-//         <ul className="flex flex-col gap-2">
-//           {achievementsData.map((achievement) => (
-//             <li key={achievement.id} className="flex items-center">
-//               {achievement.earned ? (
-//                 <CheckCircle className="text-green-500 mr-2" />
-//               ) : (
-//                 <XCircle className="text-red-500 mr-2" />
-//               )}
-//               <span className={achievement.earned ? 'text-white' : 'text-gray-400'}>
-//                 {achievement.name}
-//               </span>
-//             </li>
-//           ))}
-//         </ul>
-//       </section>
-
-//       <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-//         <h2 className="text-xl font-semibold mb-4">Current Challenges Overview</h2>
-//         <ul className="flex flex-col gap-2">
-//           {challengesData.map((challenge) => (
-//             <li key={challenge.id} className="flex justify-between items-center">
-//               <span className="text-white">{challenge.name}</span>
-//               <span className={`font-semibold ${challenge.status === 'Ongoing' ? 'text-yellow-500' : 'text-gray-400'}`}>
-//                 {challenge.status}
-//               </span>
-//             </li>
-//           ))}
-//         </ul>
-//       </section>
-
-//       <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-//         <h2 className="text-xl font-semibold mb-4">Settings</h2>
-//         <div className="flex items-center justify-between mb-2">
-//           <span className="text-white">Dark Mode</span>
-//           <input
-//             type="checkbox"
-//             checked={darkMode}
-//             onChange={() => setDarkMode(!darkMode)}
-//             className="cursor-pointer"
-//           />
+//         {/* Mobile Content */}
+//         <div className="md:hidden bg-[#112240] border border-cyan-800 rounded-xl">
+//           <div className="p-6">
+//             {renderContent()}
+//           </div>
 //         </div>
-//         <div className="flex items-center justify-between mb-2">
-//           <span className="text-white">Notifications</span>
-//           <input
-//             type="checkbox"
-//             checked={notificationsEnabled}
-//             onChange={() => setNotificationsEnabled(!notificationsEnabled)}
-//             className="cursor-pointer"
-//           />
-//         </div>
-//       </section>
+//       </div>
 
 //       {/* Edit Profile Modal */}
-//       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-//         <Modal.Header closeButton>
-//           <Modal.Title>Edit Profile</Modal.Title>
+//       <Modal 
+//         show={modalVisible} 
+//         onHide={() => setModalVisible(false)}
+//         centered
+//         dialogClassName="modal-90w"
+//       >
+//         {/* Modal content remains the same as previous version */}
+//         <Modal.Header closeButton className="bg-[#0A1128] border-b border-cyan-800">
+//           <Modal.Title className="text-cyan-500">Matrix Modification</Modal.Title>
 //         </Modal.Header>
-//         <Modal.Body>
-//           <div className="mb-3">
-//             <label className="block text-sm">Username</label>
-//             <input
-//               type="text"
-//               value={newUsername}
-//               onChange={(e) => setNewUsername(e.target.value)}
-//               className="w-full p-2 rounded bg-gray-700 text-white"
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label className="block text-sm">Bio</label>
-//             <textarea
-//               value={newBio}
-//               onChange={(e) => setNewBio(e.target.value)}
-//               className="w-full p-2 rounded bg-gray-700 text-white"
-//             />
+//         <Modal.Body className="bg-[#0A1128]">
+//           <div className="space-y-4">
+//             <div>
+//               <label className="block mb-2 text-cyan-400">Username Override</label>
+//               <input 
+//                 type="text" 
+//                 value={editProfile.username}
+//                 onChange={(e) => setEditProfile(prev => ({
+//                   ...prev, 
+//                   username: e.target.value
+//                 }))}
+//                 className="w-full p-2 bg-[#112240] text-cyan-300 border border-cyan-700 rounded focus:ring-2 focus:ring-cyan-500"
+//               />
+//             </div>
+//             <div>
+//               <label className="block mb-2 text-cyan-400">Bio Update</label>
+//               <textarea 
+//                 value={editProfile.bio}
+//                 onChange={(e) => setEditProfile(prev => ({
+//                   ...prev, 
+//                   bio: e.target.value
+//                 }))}
+//                 className="w-full p-2 bg-[#112240] text-cyan-300 border border-cyan-700 rounded focus:ring-2 focus:ring-cyan-500"
+//                 rows={3}
+//               />
+//             </div>
 //           </div>
 //         </Modal.Body>
-//         <Modal.Footer>
-//           <button variant="secondary" onClick={() => setShowEditModal(false)}>
-//             Cancel
+//         <Modal.Footer className="bg-[#0A1128] border-t border-cyan-800">
+//           <button 
+//             onClick={() => setModalVisible(false)}
+//             className="bg-[#112240] text-cyan-400 px-4 py-2 rounded mr-2 hover:bg-cyan-800/20 transition border border-cyan-700"
+//           >
+//             Abort
 //           </button>
-//           <button variant="primary" onClick={handleEditProfile}>
-//             Save Changes
+//           <button 
+//             onClick={handleProfileUpdate}
+//             className="bg-cyan-900/50 text-cyan-200 px-4 py-2 rounded hover:bg-cyan-800/50 transition border border-cyan-600"
+//           >
+//             Synchronize
 //           </button>
 //         </Modal.Footer>
 //       </Modal>
@@ -146,228 +293,339 @@
 //   );
 // };
 
-// // export default UserProfilePage;
-
-import React, { useState } from 'react';
+// export default UserProfilePage;
+import React, { useState, useEffect } from 'react';
+import { CheckCircle, Flame, Zap, Edit, Menu, X } from 'lucide-react';
 import Avatar from 'react-avatar';
 import { Modal } from 'react-bootstrap';
-import { CheckCircle, XCircle, Bell, Lock } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../features/authSlice';
-
-const achievementsData = [
-  { id: 1, name: '21-Day Fitness Master', earned: true },
-  { id: 2, name: '10,000 Steps a Day', earned: false },
-  { id: 3, name: 'Daily Meditator', earned: true },
-];
-
-const challengesData = [
-  { id: 1, name: '30-Day Yoga Challenge', status: 'Ongoing' },
-  { id: 2, name: 'Weekly Reading Challenge', status: 'Completed' },
-  { id: 3, name: 'Daily Running Challenge', status: 'Upcoming' },
-];
+import axios from 'axios';
 
 export const UserProfilePage = () => {
-  const username = useSelector(selectCurrentUser)
   const [user, setUser] = useState({
-    username: username.toUpperCase(),
-    bio: 'Fitness enthusiast and nature lover.',
-    profilePicture: '', // URL for the profile picture
-    totalChallengesCompleted: 5,
-    totalAchievementsEarned: 3,
+    username: '',
+    points: 0,
+    badges: [],
+    streaks: [],
+    bio: 'Neural architect | Digital innovator'
   });
 
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [newUsername, setNewUsername] = useState(user.username);
-  const [newBio, setNewBio] = useState(user.bio);
-  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [editProfile, setEditProfile] = useState({
+    username: '',
+    bio: ''
+  });
 
-  const handleEditProfile = () => {
-    setUser({ ...user, username: newUsername, bio: newBio });
-    setShowEditModal(false);
+  const [activeSection, setActiveSection] = useState('overview');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authToken, setAuthToken] = useState(localStorage.getItem('token')); // Assuming token is saved in localStorage
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/users/profile', {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+        // console.log(response.data);
+        setUser(response.data);
+        // console.log(response.data);
+        setEditProfile({
+          username: response.data.username,
+          bio: response.data.bio
+        });
+      } catch (error) {
+        if (error.response?.status === 403) {
+          console.error("Forbidden: Token is invalid or expired");
+          // Optionally log the user out or redirect to login
+      } else {
+          console.error("Error fetching user data:", error.message);
+      }
+      }
+    };
+    if (!authToken) {
+      console.error("No auth token found");
+      return;
+  }
+  
+    if (authToken) {
+      fetchUserData();
+    }
+  }, [authToken]);
+
+  const handleProfileUpdate = async () => {
+    try {
+      const response = await axios.put(
+        'http://localhost:8000/api/users/profile',
+        { username: editProfile.username, bio: editProfile.bio },
+        {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        }
+      );
+
+      setUser(response.data);
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
-  return (
-    <div className={`min-h-screen p-5 ${darkMode ? 'bg-gray-900' : 'bg-white'} text-white`}>
-      <header className="flex justify-between items-center mb-5">
-        <h1 className="text-2xl font-bold">User Profile</h1>
-      </header>
-
-      <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-        <h2 className="text-xl font-semibold mb-4">User Information</h2>
-        <div className="flex items-center mb-4">
-          <Avatar name={user.username} size="60" round={true} />
-          <div className="ml-4">
-            <h3 className="text-lg">{user.username}</h3>
-            <p className="text-gray-400">{user.bio}</p>
+  // const renderContent = () => {
+  //   switch (activeSection) {
+  //     case 'overview':
+  //       return (
+  //         <div className="space-y-4">
+  //           <div className="flex items-center bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+  //             <Avatar name={user.username} size="50" round={true} className="mr-4 ring-2 ring-cyan-500" />
+  //             <div>
+  //               <h2 className="text-xl font-bold text-cyan-300">{user.username}</h2>
+  //               <p className="text-cyan-600 text-xs">{user.bio}</p>
+  //             </div>
+  //           </div>
+  //           <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center">
+  //             <Flame className="mr-3 text-yellow-500 animate-pulse" />
+  //             <span className="text-cyan-300">{user.points} Neural Points</span>
+  //           </div>
+  //           <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+  //             <h3 className="text-xl text-cyan-500 mb-3">Quick Stats</h3>
+  //             <div className="grid grid-cols-2 gap-4">
+  //               <div className="bg-[#112240] p-3 rounded-lg text-center">
+  //                 <span className="block text-cyan-300 text-2xl font-bold">{user.badges.length}</span>
+  //                 <span className="text-cyan-600 text-sm">Achievements</span>
+  //               </div>
+  //               <div className="bg-[#112240] p-3 rounded-lg text-center">
+  //                 <span className="block text-cyan-300 text-2xl font-bold">{user.streaks.length}</span>
+  //                 <span className="text-cyan-600 text-sm">Active Streams</span>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       );
+  //     case 'badges':
+  //       return (
+  //         <div className="space-y-4">
+  //           {user.badges.map((badge, index) => (
+  //             <div key={index} className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center">
+  //               <CheckCircle className="text-cyan-500 mr-4" />
+  //               <div>
+  //                 <h4 className="text-cyan-300 font-semibold">{badge.badgeName}</h4>
+  //                 <p className="text-cyan-600 text-sm">{badge.description}</p>
+  //                 <p className="text-xs text-cyan-700 mt-1">
+  //                   Synchronized: {badge.dateEarned.toLocaleDateString()}
+  //                 </p>
+  //               </div>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       );
+  //     case 'streaks':
+  //       return (
+  //         <div className="space-y-4">
+  //           {user.streaks.map((streak, index) => (
+  //             <div key={index} className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center justify-between">
+  //               <div className="flex items-center">
+  //                 {streak.icon}
+  //                 <span className="ml-3 text-cyan-300">{streak.habitId} Stream</span>
+  //               </div>
+  //               <span className="text-cyan-500 font-bold">{streak.streakCount} Cycles</span>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       );
+  //     case 'settings':
+  //       return (
+  //         <div className="space-y-4">
+  //           <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+  //             <h3 className="text-cyan-500 mb-3">System Configuration</h3>
+  //             <p className="text-cyan-600">Neural Network Synchronized</p>
+  //           </div>
+  //         </div>
+  //       );
+  //     default:
+  //       return null;
+  //   }
+  // };
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'overview':
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+              <Avatar name={user.username} size="50" round={true} className="mr-4 ring-2 ring-cyan-500" />
+              <div>
+                <h2 className="text-xl font-bold text-cyan-300">{user.username}</h2>
+                <p className="text-cyan-600 text-xs">{user.bio}</p>
+              </div>
+            </div>
+            <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center">
+              <Flame className="mr-3 text-yellow-500 animate-pulse" />
+              <span className="text-cyan-300">{user.points} Neural Points</span>
+            </div>
+            <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+              <h3 className="text-xl text-cyan-500 mb-3">Quick Stats</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#112240] p-3 rounded-lg text-center">
+                  <span className="block text-cyan-300 text-2xl font-bold">{user.badges.length}</span>
+                  <span className="text-cyan-600 text-sm">Achievements</span>
+                </div>
+                <div className="bg-[#112240] p-3 rounded-lg text-center">
+                  <span className="block text-cyan-300 text-2xl font-bold">{user.streaks.length}</span>
+                  <span className="text-cyan-600 text-sm">Active Streams</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col">
-          <span>Total Challenges Completed: {user.totalChallengesCompleted}</span>
-          <span>Total Achievements Earned: {user.totalAchievementsEarned}</span>
-        </div>
-        <button
-          onClick={() => setShowEditModal(true)}
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition mt-3"
-        >
-          Edit Profile
-        </button>
-      </section>
+        );
+      case 'badges':
+        return (
+          <div className="space-y-4">
+            {user.badges.length > 0 ? (
+              user.badges.map((badge, index) => (
+                <div key={index} className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center">
+                  <CheckCircle className="text-cyan-500 mr-4" />
+                  <div>
+                    <h4 className="text-cyan-300 font-semibold">{badge.badgeName}</h4>
+                    <p className="text-cyan-600 text-sm">{badge.description || 'No description available'}</p>
+                    <p className="text-xs text-cyan-700 mt-1">
+                      Synchronized: {new Date(badge.dateEarned).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-cyan-500">No achievements earned yet.</div>
+            )}
+          </div>
+        );
+      case 'streaks':
+        return (
+          <div className="space-y-4">
+            {user.streaks.length > 0 ? (
+              user.streaks.map((streak, index) => (
+                <div key={index} className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800 flex items-center justify-between">
+                  <div className="flex items-center">
+                    {streak.icon || <Zap className="text-cyan-500" />}
+                    <span className="ml-3 text-cyan-300">{streak.habitId || 'Unnamed Stream'}</span>
+                  </div>
+                  <span className="text-cyan-500 font-bold">{streak.streakCount || 0} Cycles</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-cyan-500">No active streaks yet.</div>
+            )}
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="space-y-4">
+            <div className="bg-[#0A1128] p-4 rounded-lg border border-cyan-800">
+              <h3 className="text-cyan-500 mb-3">System Configuration</h3>
+              {/* <p className="text-cyan-600">Neural Network Synchronized</p> */}
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#0A1128] via-[#1A2B4A] to-[#2C3E5A] text-cyan-300 font-mono tracking-tight py-16 px-4">
+      <div className="container mx-auto max-w-6xl">
+        {/* Mobile Header */}
+        <div className="md:hidden bg-[#112240] border border-cyan-800 rounded-xl mb-4">
+          <div className="flex justify-between items-center p-4">
+            <div className="flex items-center space-x-4">
+              <Avatar name={user.username} size="50" round={true} className="ring-2 ring-cyan-500" />
+              <div>
+                <h2 className="text-xl font-bold text-cyan-300">{user.username}</h2>
+                <p className="text-cyan-600 text-xs">{user.bio}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button onClick={() => setModalVisible(true)} className="bg-cyan-900/50 text-cyan-300 p-2 rounded-full hover:bg-cyan-800/50 transition border border-cyan-700">
+                <Edit className="w-4 h-4" />
+              </button>
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="bg-cyan-900/50 text-cyan-300 p-2 rounded-full hover:bg-cyan-800/50 transition border border-cyan-700">
+                {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
 
-      <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-        <h2 className="text-xl font-semibold mb-4">Achievements / Badges</h2>
-        <ul className="flex flex-col gap-2">
-          {achievementsData.map((achievement) => (
-            <li key={achievement.id} className="flex items-center">
-              {achievement.earned ? (
-                <CheckCircle className="text-green-500 mr-2" />
-              ) : (
-                <XCircle className="text-red-500 mr-2" />
-              )}
-              <span className={achievement.earned ? 'text-white' : 'text-gray-400'}>
-                {achievement.name}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-        <h2 className="text-xl font-semibold mb-4">Current Challenges Overview</h2>
-        <ul className="flex flex-col gap-2">
-          {challengesData.map((challenge) => (
-            <li key={challenge.id} className="flex justify-between items-center">
-              <span className="text-white">{challenge.name}</span>
-              <span className={`font-semibold ${challenge.status === 'Ongoing' ? 'text-yellow-500' : 'text-gray-400'}`}>
-                {challenge.status}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <button className="bg-green-600 text-white p-2 rounded hover:bg-green-700 mt-3">
-          Start New Challenge
-        </button>
-        <a href="/challenges" className="text-blue-400 mt-2 block">View All Challenges</a>
-      </section>
-
-      <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-        <h2 className="text-xl font-semibold mb-4">Settings</h2>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-white">Dark Mode</span>
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-            className="cursor-pointer"
-          />
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="bg-[#0A1128] border-t border-cyan-800">
+              {['overview', 'badges', 'streaks', 'settings'].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => {
+                    setActiveSection(section);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left p-4 border-b border-cyan-800 transition-colors ${activeSection === section ? 'bg-cyan-800/30 text-cyan-200' : 'text-cyan-500 hover:bg-cyan-800/20'}`}
+                >
+                  <span className="capitalize">{section}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-white">Notifications</span>
-          <input
-            type="checkbox"
-            checked={notificationsEnabled}
-            onChange={() => setNotificationsEnabled(!notificationsEnabled)}
-            className="cursor-pointer"
-          />
-        </div>
-        <button className="bg-orange-600 text-white p-2 rounded hover:bg-orange-700 mt-3 flex items-center">
-          <Lock className="mr-2" /> Change Password
-        </button>
-        <button className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 mt-3 flex items-center">
-          <Bell className="mr-2" /> Manage Notifications
-        </button>
-      </section>
 
-      <section className="bg-gray-800 rounded-lg shadow-lg p-5 mb-5">
-        <h2 className="text-xl font-semibold mb-4">Activity Feed</h2>
-        <ul className="flex flex-col gap-2">
-          <li className="text-white">Joined 30-Day Yoga Challenge</li>
-          <li className="text-white">Unlocked "21-Day Fitness Master" badge</li>
-          <li className="text-gray-400">Updated profile on [Date]</li>
-        </ul>
-      </section>
+        {/* Desktop Layout */}
+        <div className="hidden md:grid md:grid-cols-[250px_1fr] gap-6">
+          {/* Sidebar Navigation */}
+          <div className="space-y-6 p-4 bg-[#112240] rounded-xl border border-cyan-800">
+            {['overview', 'badges', 'streaks', 'settings'].map((section) => (
+              <button
+                key={section}
+                onClick={() => setActiveSection(section)}
+                className={`w-full text-left p-4 border-b border-cyan-800 transition-colors ${activeSection === section ? 'bg-cyan-800/30 text-cyan-200' : 'text-cyan-500 hover:bg-cyan-800/20'}`}
+              >
+                <span className="capitalize">{section}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Content */}
+          <div className="space-y-4">{renderContent()}</div>
+        </div>
+      </div>
 
       {/* Edit Profile Modal */}
-      
-      {/* <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+      <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="mb-3">
-            <label className="block text-sm">Username</label>
-            <input
-              type="text"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
-              className="w-full p-2 rounded bg-gray-700 text-white"
-            />
-          </div>
-          <div className="mb-3">
-            <label className="block text-sm">Bio</label>
-            <textarea
-              value={newBio}
-              onChange={(e) => setNewBio(e.target.value)}
-              className="w-full p-2 rounded bg-gray-700 text-white"
-            />
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="username" className="text-cyan-500">Username</label>
+              <input
+                id="username"
+                type="text"
+                value={editProfile.username}
+                onChange={(e) => setEditProfile({ ...editProfile, username: e.target.value })}
+                className="w-full p-2 mt-2 rounded-lg bg-[#0A1128] text-cyan-300 border border-cyan-700"
+              />
+            </div>
+            <div>
+              <label htmlFor="bio" className="text-cyan-500">Bio</label>
+              <textarea
+                id="bio"
+                value={editProfile.bio}
+                onChange={(e) => setEditProfile({ ...editProfile, bio: e.target.value })}
+                className="w-full p-2 mt-2 rounded-lg bg-[#0A1128] text-cyan-300 border border-cyan-700"
+                rows="3"
+              />
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancel
-          </button>
-          <button variant="primary" onClick={handleEditProfile}>
-            Save Changes
-          </button>
+          <button onClick={handleProfileUpdate} className="bg-cyan-700 text-cyan-300 p-2 rounded-md">Save Changes</button>
         </Modal.Footer>
-      </Modal> */}
-<Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-  <Modal.Header closeButton className="bg-gray-800 text-white">
-    <Modal.Title>Edit Profile</Modal.Title>
-  </Modal.Header>
-  <Modal.Body className="bg-gray-900 text-white">
-    <div className="mb-3">
-      <label className="block text-sm">Username</label>
-      <input
-        type="text"
-        value={newUsername}
-        onChange={(e) => setNewUsername(e.target.value)}
-        className="w-full p-3 rounded bg-gray-700 text-white"
-      />
-    </div>
-    <div className="mb-3">
-      <label className="block text-sm">Bio</label>
-      <textarea
-        value={newBio}
-        onChange={(e) => setNewBio(e.target.value)}
-        className="w-full p-3 rounded bg-gray-700 text-white"
-      />
-    </div>
-  </Modal.Body>
-  <Modal.Footer
-    style={{ backgroundColor: '#1f2937', color: 'white' }}
-  >
-    <button
-      variant="secondary"
-      onClick={() => setShowEditModal(false)}
-      className="px-6 py-2 bg-gray-600 rounded text-gray-300 hover:bg-gray-500 transition-colors"
-    >
-      Cancel
-    </button>
-    <button
-      variant="primary"
-      onClick={handleEditProfile}
-      className="px-6 py-2 bg-gray-600 rounded text-white hover:bg-gray-700 transition-colors"
-    >
-      Save Changes
-    </button>
-  </Modal.Footer>
-</Modal>
-
-
+      </Modal>
     </div>
   );
 };
-
-// export default UserProfilePage;

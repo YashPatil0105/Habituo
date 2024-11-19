@@ -340,3 +340,231 @@ export const DashboardPage = () => {
   );
 };
 
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import { Card } from "@/components/ui/card";
+// import { Bell, Calendar, CheckCircle, Trophy, Target, Award } from "lucide-react";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogFooter,
+// } from "@/components/ui/dialog";
+// import { Button } from "@/components/ui/button";
+// import { Progress } from "@/components/ui/progress";
+// import { useSelector } from "react-redux";
+// import { selectCurrentUser, selectCurrentToken } from "../../features/authSlice.js";
+
+// export const DashboardPage = () => {
+//   const user = useSelector(selectCurrentUser);
+//   const token = useSelector(selectCurrentToken);
+
+//   const [dashboardData, setDashboardData] = useState({
+//     challenges: {
+//       totalDays: 21,
+//       completedDays: [],
+//       completedDates: [],
+//       currentProgress: 0,
+//       streakBroken: false,
+//       lastCompletedDate: null,
+//     },
+//     tasks: [],
+//   });
+//   const [notifications, setNotifications] = useState([]);
+//   const [showModal, setShowModal] = useState(false);
+
+//   useEffect(() => {
+//     fetchDashboardData();
+//     fetchNotifications();
+//   }, []);
+
+//   const api = axios.create({
+//     baseURL: "/api",
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+
+//   const fetchDashboardData = async () => {
+//     try {
+//       const { data } = await api.get("/dashboard");
+//       setDashboardData(data);
+//     } catch (error) {
+//       console.error("Error fetching dashboard data:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const fetchNotifications = async () => {
+//     try {
+//       const { data } = await api.get("/notifications");
+//       setNotifications(data);
+//     } catch (error) {
+//       console.error("Error fetching notifications:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const handleTaskCompletion = async (taskId) => {
+//     try {
+//       const { data } = await api.post("/dashboard/task/complete", { taskId });
+//       setDashboardData((prev) => ({
+//         ...prev,
+//         tasks: data.tasks,
+//         challenges: data.challenges,
+//       }));
+//       addNotification("✅ Task completed!");
+//     } catch (error) {
+//       console.error("Error completing task:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const handleStreakCompletion = async (index) => {
+//     try {
+//       const { data } = await api.post("/dashboard/streak/complete", { index });
+//       setDashboardData((prev) => ({ ...prev, challenges: data }));
+//       addNotification("🎉 Great job! You've completed today's challenge!");
+//     } catch (error) {
+//       console.error("Error completing streak:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const restoreStreak = async () => {
+//     try {
+//       const { data } = await api.post("/dashboard/streak/restore");
+//       setDashboardData((prev) => ({ ...prev, challenges: data }));
+//       addNotification("🔄 Your streak has been restored!");
+//       setShowModal(false);
+//     } catch (error) {
+//       console.error("Error restoring streak:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const addNotification = (message) => {
+//     const newNotification = {
+//       id: Date.now(),
+//       message,
+//       timestamp: new Date(),
+//     };
+//     setNotifications((prev) => [newNotification, ...prev].slice(0, 5));
+//   };
+
+//   const toggleNotificationRead = async (id) => {
+//     try {
+//       const { data } = await api.put(`/notifications/${id}/toggle`);
+//       setNotifications((prev) =>
+//         prev.map((n) => (n.id === id ? { ...n, read: data.read } : n))
+//       );
+//     } catch (error) {
+//       console.error("Error toggling notification:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   const deleteNotification = async (id) => {
+//     try {
+//       await api.delete(`/notifications/${id}`);
+//       setNotifications((prev) => prev.filter((n) => n.id !== id));
+//     } catch (error) {
+//       console.error("Error deleting notification:", error.response?.data?.message || error.message);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+//       <div className="container mx-auto p-6 space-y-6">
+//         <header className="flex justify-between items-center bg-gray-800/50 rounded-xl p-6 backdrop-blur-sm">
+//           <div className="flex items-center gap-4">
+//             <img
+//               src={user.avatar}
+//               alt={user.name}
+//               className="w-12 h-12 rounded-full border-2 border-purple-500"
+//             />
+//             <div>
+//               <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+//                 Welcome back, {user.username}!
+//               </h1>
+//               <p className="text-gray-400">Keep up the great work!</p>
+//             </div>
+//           </div>
+//           <div className="relative">
+//             <Bell className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer transition-colors" />
+//             {notifications.length > 0 && (
+//               <span className="absolute -top-2 -right-2 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center text-xs">
+//                 {notifications.length}
+//               </span>
+//             )}
+//           </div>
+//         </header>
+
+//         <main className="grid lg:grid-cols-2 gap-6">
+//           {/* Tasks */}
+//           <section>
+//             <h2 className="text-xl font-bold mb-4">Your Tasks</h2>
+//             {dashboardData.tasks.map((task) => (
+//               <Card
+//                 key={task.id}
+//                 className="p-4 flex items-center justify-between bg-gray-800 text-white rounded-lg mb-4"
+//               >
+//                 <span>{task.title}</span>
+//                 <Button
+//                   variant="outline"
+//                   onClick={() => handleTaskCompletion(task._id)}
+//                   className="text-sm text-gray-300 border-gray-600"
+//                 >
+//                   {task.completed ? "Undo" : "Complete"}
+//                 </Button>
+//               </Card>
+//             ))}
+//           </section>
+
+//           {/* Streak and Challenges */}
+//           <section>
+//             <h2 className="text-xl font-bold mb-4">Current Challenge</h2>
+//             <Card className="p-4 bg-gray-800 text-white rounded-lg">
+//               <div className="flex items-center justify-between mb-4">
+//                 <span>Progress</span>
+//                 <span>
+//                   {dashboardData.challenges.currentProgress} / {dashboardData.challenges.totalDays}
+//                 </span>
+//               </div>
+//               <Progress value={dashboardData.challenges.currentProgress} max={dashboardData.challenges.totalDays} />
+//               <Button
+//                 variant="outline"
+//                 className="mt-4 text-sm text-gray-300 border-gray-600"
+//                 onClick={() => handleStreakCompletion()}
+//               >
+//                 Mark Today Complete
+//               </Button>
+//             </Card>
+//           </section>
+//         </main>
+
+//         {/* Restore Streak Dialog */}
+//         <Dialog open={showModal} onOpenChange={setShowModal}>
+//           <DialogContent className="bg-gray-800 text-white border-gray-700">
+//             <DialogHeader>
+//               <DialogTitle>Restore Streak</DialogTitle>
+//               <DialogDescription className="text-gray-400">
+//                 Are you sure you want to restore your streak? This can only be done once!
+//               </DialogDescription>
+//             </DialogHeader>
+//             <DialogFooter>
+//               <Button
+//                 variant="outline"
+//                 onClick={() => setShowModal(false)}
+//                 className="border-gray-600 text-gray-300 hover:bg-gray-700"
+//               >
+//                 Cancel
+//               </Button>
+//               <Button
+//                 onClick={restoreStreak}
+//                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+//               >
+//                 Restore
+//               </Button>
+//             </DialogFooter>
+//           </DialogContent>
+//         </Dialog>
+//       </div>
+//     </div>
+//   );
+// };

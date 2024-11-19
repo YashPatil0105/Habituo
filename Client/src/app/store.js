@@ -2,7 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import tasksReducer from '../features/tasksSlice';
 import challengesReducer from '../features/challengesSlice';
-import notificationsReducer from '../features/notificationsSlice';
+import { notificationsApiSlice } from '../features/notificationsApiSlice';
 import { apiSlice } from './api/apiSlice';
 import authReducer from '../features/authSlice';
 
@@ -13,7 +13,7 @@ export const store = configureStore({
     auth : authReducer,
     tasks: tasksReducer,
     challenges: challengesReducer,
-    notifications: notificationsReducer,
+    notifications: notificationsApiSlice,
   },
   middleware : getDefaultMiddleware => 
     getDefaultMiddleware().concat(apiSlice.middleware),

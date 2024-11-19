@@ -1,13 +1,16 @@
-import express from 'express';
-import { joinChallenge, completeChallenge } from '../controllers/challengeController.js';
-import authenticate from '../middleware/authenticate.js';
+import express from "express";
+import {
+  getChallenges,
+  joinChallenge,
+  createChallenge,
+  updateProgress,
+} from "../controllers/challengeController.js";
 
 const router = express.Router();
 
-// Join a challenge
-router.post('/:challengeId/join', authenticate, joinChallenge);
-
-// Complete a challenge
-router.post('/:challengeId/complete', authenticate, completeChallenge);
+router.get("/", getChallenges);
+router.post("/join", joinChallenge);
+router.post("/create", createChallenge);
+router.post("/progress", updateProgress);
 
 export default router;

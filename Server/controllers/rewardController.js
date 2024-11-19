@@ -166,3 +166,39 @@ export const getUserRewards = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Create a new reward manually
+export const createReward = async (req, res) => {
+  const { userId, type, points, badgeName, habitId, challengeId } = req.body;
+
+  try {
+    if (!userId || !type) {
+      return res.status(400).json({ error: "userId and type are required fields." });
+    }
+
+    // Validate reward type
+    if (type === "points" && !points) {
+      return res.status(400).json({ error: "Points must be specified for 'points' type reward." });
+    }
+    if (type === "badge" && !badgeName) {
+      return res.status(400).json({ error: "Badge name must be specified for 'badge' type reward." });
+    }
+
+    const reward = await Reward.create({
+      userId,
+      type,
+      points: points || 0,
+      badgeName: badgeName || null,
+      habitId: habitId || null,
+      challengeId: challengeId || null,
+      dateEarned: new Date(),
+    });
+
+    res.status(201).json({
+      message: "Reward created successfully",
+      reward,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

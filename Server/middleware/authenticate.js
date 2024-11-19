@@ -63,7 +63,7 @@ export const verifyJWT = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) return res.sendStatus(403); //invalid token
-            console.log("decoded jwt :", decoded);
+            // console.log("decoded jwt :", decoded);
             req.user = decoded.UserInfo;
             req.userId = decoded.UserInfo.id;
             // req.roles = decoded.UserInfo.roles;
