@@ -8,7 +8,7 @@ const BadgeSchema = new mongoose.Schema({
 });
 
 const StreakSchema = new mongoose.Schema({
-  habitId: { type: mongoose.Schema.Types.ObjectId, ref: "Habit" },
+  habitId: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
   streakCount: { type: Number, default: 0 },
   lastUpdated: { type: Date, default: Date.now }, // Set default for consistency
 });

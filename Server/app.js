@@ -136,6 +136,7 @@ import rewardRoutes from './routes/rewardRoutes.js';
 import challengeRoutes from './routes/challengeRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import habitRoutes from './routes/habitRoutes.js';
 const app = express();
 
 // Directory setup for ES Modules
@@ -155,6 +156,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Apply routes without verifyJWT for public access
 app.use('/', authRoutes);
+app.use('/api/habits', habitRoutes); // Add the habit routes
 app.use("/api/dashboard", dashboardRoutes);
 app.use('/plans', planRoutes);
 app.use("/api/rewards", rewardRoutes);

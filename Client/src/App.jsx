@@ -8,10 +8,11 @@ import Login from "./components/Login";
 import Layout from "./components/Layout";
 import Register from "./components/Register";
 import BadgeMerchandise from "./components/pages/BadgeMerchandise";
-
+import { Toaster } from 'react-hot-toast';
 function App() {
   return (
     <div className="App">
+      <Toaster position="top-right" />
       <Navbar />
       <Routes>
         {/* Public routes */}
