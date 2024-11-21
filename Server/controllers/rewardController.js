@@ -122,16 +122,59 @@ export const updateRewards = async (req, res) => {
 
     // Check for badges
     const earnedBadges = [];
+
+    // Check for "Beginner" badge
     if (!user.badges.some((badge) => badge.badgeName === "Beginner") && streak?.streakCount >= BADGES.Beginner.criteria.daysTracked) {
       earnedBadges.push("Beginner");
     }
+    
+    // Check for "Committed" badge
     if (!user.badges.some((badge) => badge.badgeName === "Committed") && streak?.streakCount >= BADGES.Committed.criteria.streakDays) {
       earnedBadges.push("Committed");
     }
+    
+    // Check for "Consistent" badge
+    if (!user.badges.some((badge) => badge.badgeName === "Consistent") && streak?.streakCount >= BADGES.Consistent.criteria.streakDays) {
+      earnedBadges.push("Consistent");
+    }
+    
+    // Check for "ChallengeSeeker" badge
+    if (!user.badges.some((badge) => badge.badgeName === "ChallengeSeeker") && user.challengesJoined >= BADGES.ChallengeSeeker.criteria.challengesJoined) {
+      earnedBadges.push("ChallengeSeeker");
+    }
+    
+    // Check for "ChallengeConqueror" badge
+    if (!user.badges.some((badge) => badge.badgeName === "ChallengeConqueror") && user.challengesCompleted >= BADGES.ChallengeConqueror.criteria.challengesCompleted) {
+      earnedBadges.push("ChallengeConqueror");
+    }
+    
+    // Check for "GoalGetter" badge
     if (!user.badges.some((badge) => badge.badgeName === "GoalGetter") && user.points >= BADGES.GoalGetter.criteria.points) {
       earnedBadges.push("GoalGetter");
     }
-    // Add checks for other badges...
+    
+    // Check for "MasterOfHabits" badge
+    if (!user.badges.some((badge) => badge.badgeName === "MasterOfHabits") && streak?.streakCount >= BADGES.MasterOfHabits.criteria.streakDays) {
+      earnedBadges.push("MasterOfHabits");
+    }
+    
+    // Check for "HabitHero" badge
+    if (!user.badges.some((badge) => badge.badgeName === "HabitHero") && user.goalsAchieved >= BADGES.HabitHero.criteria.goalsAchieved) {
+      earnedBadges.push("HabitHero");
+    }
+    
+    // Check for "StreakStar" badge
+    if (!user.badges.some((badge) => badge.badgeName === "StreakStar") && streak?.streakCount >= BADGES.StreakStar.criteria.streakDays) {
+      earnedBadges.push("StreakStar");
+    }
+    
+    // Check for "Perfectionist" badge
+    if (!user.badges.some((badge) => badge.badgeName === "Perfectionist") && user.challengesCompleted >= BADGES.Perfectionist.criteria.challengesCompleted) {
+      earnedBadges.push("Perfectionist");
+    }
+    
+
+    
 
     for (const badgeName of earnedBadges) {
       user.badges.push({ badgeName });

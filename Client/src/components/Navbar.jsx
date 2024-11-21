@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut, selectCurrentUser } from "../features/authSlice";
+import { jwtDecode } from 'jwt-decode';
 import {
   Menu,
   X,
@@ -13,10 +14,11 @@ import {
   LogIn,
   ShoppingBag,
   Bell,
-  ChevronDown,
+  ChevronDown,Coins
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGetNotificationsQuery } from "../features/notificationsApiSlice"; // Import the hook for fetching notifications
+import { useGetNotificationsQuery } from "../features/notificationsApiSlice";
+import { useGetUserRewardsQuery } from "../features/rewardApiSlice"; // Import the hook for fetching notifications
 
 
 export const Navbar = () => {
@@ -24,6 +26,8 @@ export const Navbar = () => {
   const [cartCount, setCartCount] = useState(3);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+
   const dispatch = useDispatch();
   const location = useLocation();
   const user = useSelector(selectCurrentUser);
@@ -32,7 +36,35 @@ export const Navbar = () => {
   const notificationsRef = useRef(null);
   const userDropdownRef = useRef(null);
 
+
+  useEffect(() => {
+    // Get token from localStorage
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      try {
+        // Decode the token to get user information
+        const decoded = jwtDecode(token);
+        // Access the id from the UserInfo object in the token
+        const userId = decoded.UserInfo.id;
+        setUserId(userId);
+
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
+ 
   const { data: notifications = [], isLoading, isError } = useGetNotificationsQuery(); // Use the hook here
+  const { data: userRewards } = useGetUserRewardsQuery(userId, {
+    skip: !isAuthenticated,
+  });
+
+  console.log(userRewards)
+    // Calculate total points
+    const totalPoints = userRewards?.reduce((total, reward) => 
+      reward.type === 'points' ? total + reward.points : total, 0) || 0;
+  
 
   useEffect(() => {
     setMenuOpen(false);
@@ -156,6 +188,13 @@ export const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center ml-6 space-x-4">
+                 {/* Rewards/Points Display */}
+                 <div className="flex items-center bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full px-3 py-1 space-x-2">
+                  <Coins className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm font-medium text-yellow-300">
+                    {totalPoints}
+                  </span>
+                </div>
                 {/* Notifications */}
                 <div 
                   className="relative" 
@@ -347,35 +386,44 @@ export const Navbar = () => {
               )}
 
               {/* Mobile Notifications */}
-              {isAuthenticated && (
-                <div className="mt-4 border-t border-gray-700/50 pt-4">
-                  <div className="px-3">
-                    <h3 className="text-white font-medium text-sm mb-2">
-                      Notifications
-                    </h3>
-                    <div className="space-y-2">
-                      {notifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                        >
-                          <div className="flex justify-between items-start">
-                            <h4 className="text-white text-sm font-medium">
-                              {notification.title}
-                            </h4>
-                            <span className="text-xs text-gray-400">
-                              {notification.time}
-                            </span>
-                          </div>
-                          <p className="text-gray-300 text-sm mt-1">
-                            {notification.message}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
+{isAuthenticated && (
+  <div className="mt-4 border-t border-gray-700/50 pt-4">
+    <div className="px-3">
+      {/* Points Display */}
+      <div className="flex items-center justify-center bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-lg px-3 py-2 mb-2">
+        <Coins className="w-5 h-5 text-yellow-400 mr-2" />
+        <span className="text-sm font-medium text-yellow-300">
+          {totalPoints} Points
+        </span>
+      </div>
+
+      {/* Notifications Header */}
+      <h3 className="text-white font-medium text-sm mb-2">
+        Notifications
+      </h3>
+      <div className="space-y-2">
+        {notifications.map((notification) => (
+          <div
+            key={notification.id}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+          >
+            <div className="flex justify-between items-start">
+              <h4 className="text-white text-sm font-medium">
+                {notification.title}
+              </h4>
+              <span className="text-xs text-gray-400">
+                {notification.time}
+              </span>
+            </div>
+            <p className="text-gray-300 text-sm mt-1">
+              {notification.message}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
             </div>
           </motion.div>
         )}
