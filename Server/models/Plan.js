@@ -24,9 +24,8 @@ const planSchema = new mongoose.Schema({
     required: true 
   },
   tasks: [taskSchema],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+
+},{timestamps: true});
 
 const Plan = mongoose.model('Plan', planSchema);
 export default Plan;

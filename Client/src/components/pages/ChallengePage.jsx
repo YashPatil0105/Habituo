@@ -401,6 +401,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { logOut, selectCurrentUser } from "../../features/authSlice.js";
+import { jwtDecode } from 'jwt-decode';
+
 import { Calendar, Trophy, Target, Plus, Book, Code, Dumbbell, AlertCircle, ChevronRight, X, Flame, Filter, Search } from 'lucide-react';
 
 // Challenge API Utility
@@ -537,7 +540,7 @@ const ChallengeCard = ({ challenge, onJoin, currentUserId }) => {
   };
 
   const isJoined = challenge.participants && challenge.participants.includes(currentUserId);
-
+  
   return (
     <div className="bg-gray-900/50 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer backdrop-blur-sm">
       <div className="flex items-center justify-between mb-4">
@@ -717,9 +720,26 @@ export const ChallengePage =()=> {
   const [error, setError] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [currentUserId, setCurrentUserId] = useState('672fb09ae0b759aaa62e6627'); // This should be set from your authentication system
+  const [currentUserId, setCurrentUserId] = useState(''); // This should be set from your authentication system
   const [searchTerm, setSearchTerm] = useState('');
 
+  useEffect(() => {
+    // Get token from localStorage
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      try {
+        // Decode the token to get user information
+        const decoded = jwtDecode(token);
+        // Access the id from the UserInfo object in the token
+        const userId = decoded.UserInfo.id;
+        setCurrentUserId(userId);
+
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
   // Sample data for ProgressCalendar
   const [progressDays, setProgressDays] = useState(
     Array.from({ length: 30 }, (_, i) => ({
@@ -796,6 +816,7 @@ export const ChallengePage =()=> {
   };
 
   const handleJoinChallenge = async (challengeId) => {
+   console.log(challengeId)
     try {
       await challengeApi.joinChallenge(currentUserId, challengeId);
       setChallenges(prevChallenges => 

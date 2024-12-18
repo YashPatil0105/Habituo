@@ -60,7 +60,7 @@ export const Navbar = () => {
     skip: !isAuthenticated,
   });
 
-  console.log(userRewards)
+  // console.log(userRewards)
     // Calculate total points
     const totalPoints = userRewards?.reduce((total, reward) => 
       reward.type === 'points' ? total + reward.points : total, 0) || 0;

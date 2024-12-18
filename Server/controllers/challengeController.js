@@ -329,3 +329,218 @@ export const createChallenge = async (req, res) => {
     });
   }
 };
+export const restoreStreak = async (req, res) => {
+  const { userId, challengeId } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (!user.streakRestoreAvailable) {
+      return res.status(400).json({ error: 'Streak restore not available' });
+    }
+
+    const streak = user.streaks.find(
+      (streak) => String(streak.habitId) === challengeId
+    );
+
+    if (!streak) return res.status(404).json({ error: 'Challenge not joined' });
+
+    const lastCompletedDay = new Date(streak.lastUpdated);
+    const today = new Date();
+    const timeDifference = today.getTime() - lastCompletedDay.getTime();
+    const hoursDifference = timeDifference / (1000 * 3600);
+
+    if (hoursDifference > 24) {
+      return res.status(400).json({ error: 'Streak can only be restored within 24 hours of missing a day' });
+    }
+
+    streak.lastUpdated = today;
+    user.streakRestoreAvailable = false;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Streak restored successfully', streak });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to restore streak' });
+  }
+};
+
+// import Challenge from '../models/Challenge.js';
+// import User from '../models/User.js';
+// import Reward from '../models/Reward.js';
+
+// export const getChallenges = async (req, res) => {
+//   try {
+//     const challenges = await Challenge.find().populate('milestones.reward');
+//     res.status(200).json(challenges);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to fetch challenges' });
+//   }
+// };
+
+// export const joinChallenge = async (req, res) => {
+//   const { userId, challengeId } = req.body;
+//   try {
+//     const challenge = await Challenge.findById(challengeId).populate('milestones.reward');
+//     if (!challenge) return res.status(404).json({ error: 'Challenge not found' });
+
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ error: 'User not found' });
+
+//     if (challenge.participants.includes(userId))
+//       return res.status(400).json({ error: 'User already joined the challenge' });
+
+//     challenge.participants.push(userId);
+//     user.streaks.push({
+//       challengeId: challengeId,
+//       streakCount: 0,
+//       lastUpdated: new Date(),
+//       completedDays: [],
+//     });
+
+//     await challenge.save();
+//     await user.save();
+
+//     res.status(200).json({ message: 'Joined challenge successfully', challenge });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to join challenge' });
+//   }
+// };
+
+// export const updateProgress = async (req, res) => {
+//   const { userId, challengeId, completedDate } = req.body;
+//   try {
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ error: 'User not found' });
+
+//     const streak = user.streaks.find(
+//       (streak) => String(streak.challengeId) === challengeId
+//     );
+
+//     if (!streak) return res.status(404).json({ error: 'Challenge not joined' });
+
+//     const challenge = await Challenge.findById(challengeId).populate('milestones.reward');
+
+//     const today = new Date(completedDate).toDateString();
+//     const lastUpdated = new Date(streak.lastUpdated).toDateString();
+
+//     if (today !== lastUpdated) {
+//       streak.streakCount += 1;
+//       streak.lastUpdated = completedDate;
+//       streak.completedDays.push(completedDate);
+
+//       const milestone = challenge.milestones.find(
+//         (milestone) => milestone.day === streak.streakCount
+//       );
+
+//       if (milestone) {
+//         const reward = milestone.reward;
+//         if (reward) {
+//           if (reward.type === 'points') {
+//             user.points += reward.points;
+//           } else if (reward.type === 'badge') {
+//             if (!user.badges.some((badge) => badge.badgeName === reward.badgeName)) {
+//               user.badges.push({
+//                 badgeName: reward.badgeName,
+//                 dateEarned: new Date(),
+//               });
+//             }
+//           }
+//         }
+//       }
+//     }
+
+//     await user.save();
+//     res.status(200).json({ message: 'Progress updated successfully', streak });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to update progress' });
+//   }
+// };
+
+// export const createChallenge = async (req, res) => {
+//   const { title, category, duration, description, difficulty, milestones, userId } = req.body;
+
+//   try {
+//     if (!title || !category || !duration || !description || !difficulty || !userId) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
+
+//     const validatedMilestones = Array.isArray(milestones) ? milestones : [];
+
+//     const newChallenge = new Challenge({
+//       title,
+//       category,
+//       duration,
+//       description,
+//       difficulty,
+//       creator: userId,
+//       milestones: [],
+//     });
+
+//     for (const milestone of validatedMilestones) {
+//       if (!milestone.day || !milestone.reward || !milestone.reward.type) {
+//         return res.status(400).json({ error: 'Invalid milestone structure' });
+//       }
+
+//       const reward = await Reward.create({
+//         type: milestone.reward.type,
+//         points: milestone.reward.points || 0,
+//         badgeName: milestone.reward.badgeName || null,
+//       });
+
+//       newChallenge.milestones.push({
+//         day: milestone.day,
+//         reward: reward._id,
+//       });
+//     }
+
+//     await newChallenge.save();
+
+//     res.status(201).json({
+//       message: 'Challenge created successfully',
+//       challenge: newChallenge,
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({
+//       error: 'Failed to create challenge',
+//       details: error.message,
+//     });
+//   }
+// };
+
+// export const restoreStreak = async (req, res) => {
+//   const { userId, challengeId } = req.body;
+//   try {
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ error: 'User not found' });
+
+//     if (!user.streakRestoreAvailable) {
+//       return res.status(400).json({ error: 'Streak restore not available' });
+//     }
+
+//     const streak = user.streaks.find(
+//       (streak) => String(streak.challengeId) === challengeId
+//     );
+
+//     if (!streak) return res.status(404).json({ error: 'Challenge not joined' });
+
+//     const lastCompletedDay = new Date(streak.lastUpdated);
+//     const today = new Date();
+//     const timeDifference = today.getTime() - lastCompletedDay.getTime();
+//     const hoursDifference = timeDifference / (1000 * 3600);
+
+//     if (hoursDifference > 24) {
+//       return res.status(400).json({ error: 'Streak can only be restored within 24 hours of missing a day' });
+//     }
+
+//     streak.lastUpdated = today;
+//     user.streakRestoreAvailable = false;
+
+//     await user.save();
+
+//     res.status(200).json({ message: 'Streak restored successfully', streak });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to restore streak' });
+//   }
+// };

@@ -40,6 +40,7 @@ const ChallengeSchema = new mongoose.Schema(
     milestones: [MilestoneSchema],
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" }
   },
   { timestamps: true }
 );
