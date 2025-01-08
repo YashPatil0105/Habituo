@@ -1,84 +1,82 @@
 # Habituo
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+![Build Status](https://img.shields.io/github/actions/workflow/status/YashPatil0105/Habituo/node.js.yml?branch=main)
+![License](https://img.shields.io/github/license/YashPatil0105/Habituo)
+![Contributors](https://img.shields.io/github/contributors/YashPatil0105/Habituo)
 
-A powerful habit-tracking and challenge management platform that helps users build positive habits through milestone rewards and collaborative challenges.
+A powerful habit-tracking platform that transforms personal development through gamified challenges and rewards.
 
-<img src="/api/placeholder/800/400" alt="Habituo Dashboard" />
+<img src="/api/placeholder/800/400" alt="Habituo Dashboard Preview" />
 
-## Features
+## ✨ Features
 
-- **Habit Tracking**: Monitor daily habits with streak management
-- **Challenge System**: Create and join group challenges
-- **Rewards**: Earn points and badges for achievements
-- **Smart Planning**: Organize tasks with daily, weekly, and monthly views
-- **Real-time Notifications**: Stay on track with timely reminders
+- **Smart Habit Tracking**: Automated streak monitoring with progress visualization
+- **Challenge System**: Create and participate in community challenges
+- **Reward Engine**: Points, badges, and milestone achievements
+- **Flexible Planning**: Daily, weekly, and monthly goal management
+- **Smart Notifications**: Customizable reminders and progress alerts
 
-<img src="/api/placeholder/400/300" alt="Challenge Dashboard" />
+## 🛠️ Tech Stack
 
-## Tech Stack
+- **Frontend**: React.js, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT
+- **Testing**: Postman
 
-![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
-![Express.js](https://img.shields.io/badge/Framework-Express.js-orange)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
-![React.js](https://img.shields.io/badge/Frontend-React-blue)
-![TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS-9cf)
-
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js
+- Node.js (v14+)
 - MongoDB
-- npm or yarn
+- npm/yarn
 
-### Installation
+### Setup
 
-1. Clone the repository:
 ```bash
+# Clone repository
 git clone https://github.com/YashPatil0105/Habituo.git
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 cd Habituo
 npm install
-cd client
-npm install
-```
+cd client && npm install
 
-3. Set up environment variables:
-```env
+# Configure environment
+# Create .env in root directory:
 MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_jwt_secret
+
+# Start development servers
+npm run dev     # Concurrent backend & frontend
+# or
+npm run server  # Backend only
+cd client && npm start  # Frontend only
 ```
 
-4. Start the application:
-```bash
-# Start backend
-npm run server
+## 📱 API Endpoints
 
-# Start frontend (new terminal)
-cd client
-npm start
-```
+- **Auth**: `POST /api/v1/auth/[register|login]`
+- **Challenges**: `GET|POST /api/v1/challenges`
+- **Plans**: `GET|POST /api/v1/plans`
+- **Rewards**: `GET /api/v1/rewards`
+- **Notifications**: `GET /api/v1/notifications`
 
-<img src="/api/placeholder/400/300" alt="Mobile View" />
+<img src="/api/placeholder/600/300" alt="API Structure" />
 
-## Contributing
+## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add: AmazingFeature'`)
+4. Push branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
 
-## License
+## 📄 License
 
-MIT License - see the [LICENSE](LICENSE) file for details.
+[MIT License](LICENSE)
 
-## Contact
+## 👤 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)  
-Project Link: [https://github.com/YourUsername/Habituo](https://github.com/YourUsername/Habituo)
+Yash Patil
+- GitHub: [@YashPatil0105](https://github.com/YashPatil0105)
