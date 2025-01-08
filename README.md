@@ -65,17 +65,30 @@ npm start
 5. Collaborate with others
 ## Screenshots
 
-### Landing Page
-![Landing Page](./client/src/assets/Login.png)
+### Login Page 
+![LoginPage Page](./client/src/assets/LoginPage.jpg)
 
-### Dashboard
-![Dashboard](./client/src/assets/Dashboard.png)
+### LandingPage
+![LandingPage](./client/src/assets/LandingPage.jpg)
 
-### Profile Section
-![Profile](./client/src/assets/Profile.png)
+### Strategize 
+![Strategize](./client/src/assets/Strategize.jpg)
 
-### Add Habit Interface
-![Add Habit](./client/src/assets/AddHabit.png)
+### InsighBoard
+![InsighBoard](./client/src/assets/InsighBoard-1.jpg)
+![InsighBoard](./client/src/assets/InsighBoard-2.jpg)
+
+
+### PeakTrack
+![PeakTrack](./client/src/assets/PeakTrack-1.jpg)
+![PeakTrack](./client/src/assets/PeakTrack-2.jpg)
+
+### HabitStore
+![HabitStore](./client/src/assets/HabitStore.jpg)
+### Profile 
+![ProfilePage](./client/src/assets/UserProfile.jpg)
+
+
 
 ## Contributing
 1. Fork repository
