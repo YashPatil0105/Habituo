@@ -1,82 +1,85 @@
 # Habituo
+Habituo is a powerful habit-tracking platform that helps users build positive habits through milestone rewards and collaborative challenges.
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/YashPatil0105/Habituo/node.js.yml?branch=main)
-![License](https://img.shields.io/github/license/YashPatil0105/Habituo)
-![Contributors](https://img.shields.io/github/contributors/YashPatil0105/Habituo)
+## Table of Contents
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Contact](#contact)
 
-A powerful habit-tracking platform that transforms personal development through gamified challenges and rewards.
+## About
+In today's fast-paced world, **Habituo** offers:
+- Structured habit tracking
+- Engaging rewards system
+- Collaborative challenges for accountability
 
-<img src="/api/placeholder/800/400" alt="Habituo Dashboard Preview" />
+## Features
+- **Habit Tracking**: Daily streaks and milestones
+- **Challenges**: Create and join group activities
+- **Rewards**: Achievement-based incentives
+- **Task Management**: Organized planning
+- **Notifications**: Smart reminders
+- **Collaboration**: Team-based goals
 
-## ✨ Features
-
-- **Smart Habit Tracking**: Automated streak monitoring with progress visualization
-- **Challenge System**: Create and participate in community challenges
-- **Reward Engine**: Points, badges, and milestone achievements
-- **Flexible Planning**: Daily, weekly, and monthly goal management
-- **Smart Notifications**: Customizable reminders and progress alerts
-
-## 🛠️ Tech Stack
-
-- **Frontend**: React.js, Tailwind CSS
+## Tech Stack
 - **Backend**: Node.js, Express.js
+- **Frontend**: React.js, TailwindCSS
 - **Database**: MongoDB
-- **Authentication**: JWT
-- **Testing**: Postman
 
-## 🚀 Quick Start
+## Installation
 
-### Prerequisites
-- Node.js (v14+)
-- MongoDB
-- npm/yarn
-
-### Setup
-
+### Backend Setup
 ```bash
-# Clone repository
 git clone https://github.com/YashPatil0105/Habituo.git
-
-# Install dependencies
-cd Habituo
+cd Habituo/server
 npm install
-cd client && npm install
 
-# Configure environment
-# Create .env in root directory:
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
+# Create .env file with:
+MONGO_URI=<your-mongodb-uri>
+JWT_SECRET=<your-jwt-secret>
+FRONTEND_URL=http://localhost:3000
 
-# Start development servers
-npm run dev     # Concurrent backend & frontend
-# or
-npm run server  # Backend only
-cd client && npm start  # Frontend only
+npm start
 ```
 
-## 📱 API Endpoints
+### Frontend Setup
+```bash
+cd ../client
+npm install
+npm start
+```
 
-- **Auth**: `POST /api/v1/auth/[register|login]`
-- **Challenges**: `GET|POST /api/v1/challenges`
-- **Plans**: `GET|POST /api/v1/plans`
-- **Rewards**: `GET /api/v1/rewards`
-- **Notifications**: `GET /api/v1/notifications`
+## Usage
+1. Register/Login
+2. Create habits to track
+3. Join or create challenges
+4. Monitor progress
+5. Collaborate with others
+## Screenshots
 
-<img src="/api/placeholder/600/300" alt="API Structure" />
+### Landing Page
+![Landing Page](./client/src/assets/Login.png)
 
-## 🤝 Contributing
+### Dashboard
+![Dashboard](./client/src/assets/Dashboard.png)
 
+### Profile Section
+![Profile](./client/src/assets/Profile.png)
+
+### Add Habit Interface
+![Add Habit](./client/src/assets/AddHabit.png)
+
+## Contributing
 1. Fork repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add: AmazingFeature'`)
-4. Push branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
+2. Create feature branch (`git checkout -b feature/YourFeature`)
+3. Commit changes (`git commit -m "Add YourFeature"`)
+4. Push branch (`git push origin feature/YourFeature`)
+5. Open pull request
 
-## 📄 License
-
-[MIT License](LICENSE)
-
-## 👤 Contact
-
-Yash Patil
-- GitHub: [@YashPatil0105](https://github.com/YashPatil0105)
+## Contact
+- **Author**: Yash Patil
+- **GitHub**: [YashPatil0105](https://github.com/YashPatil0105)
+- **LinkedIn**:[YashPatil](https://linkedin.com/in/yash-patil-web-dev)
