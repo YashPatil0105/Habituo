@@ -31,7 +31,7 @@ In today's fast-paced world, **Habituo** offers:
 
 ## Tech Stack
 - **Backend**: Node.js, Express.js
-- **Frontend**: React.js, TailwindCSS
+- **Frontend**: React.js, TailwindCSS,Redux
 - **Database**: MongoDB
 
 ## Installation
