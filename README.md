@@ -52,7 +52,7 @@ npm start
 
 ### Frontend Setup
 ```bash
-cd ../client
+cd ../Client
 npm install
 npm start
 ```
@@ -66,27 +66,27 @@ npm start
 ## Screenshots
 
 ### Login Page 
-![LoginPage Page](./client/src/assets/LoginPage.jpg)
+![LoginPage Page](./Client/assets/LoginPage.jpg)
 
 ### LandingPage
-![LandingPage](./client/src/assets/LandingPage.jpg)
+![LandingPage](./Client/assets/LandingPage.jpg)
 
 ### Strategize 
-![Strategize](./client/src/assets/Strategize.jpg)
+![Strategize](./Client/assets/StrategizePage.jpg)
 
 ### InsighBoard
-![InsighBoard](./client/src/assets/InsighBoard-1.jpg)
-![InsighBoard](./client/src/assets/InsighBoard-2.jpg)
+![InsighBoard](./Client/assets/InsightBoard-1.jpg)
+![InsighBoard](./Client/assets/InsightBoard-2.jpg)
 
 
 ### PeakTrack
-![PeakTrack](./client/src/assets/PeakTrack-1.jpg)
-![PeakTrack](./client/src/assets/PeakTrack-2.jpg)
+![PeakTrack](./Client/assets/PeakTrack-1.jpg)
+![PeakTrack](./Client/assets/PeakTrack-2.jpg)
 
 ### HabitStore
-![HabitStore](./client/src/assets/HabitStore.jpg)
+![HabitStore](./Client/assets/HabitStore.jpg)
 ### Profile 
-![ProfilePage](./client/src/assets/UserProfile.jpg)
+![ProfilePage](./Client/assets/UserProfile.jpg)
 
 
 
